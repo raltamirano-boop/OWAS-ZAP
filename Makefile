@@ -40,7 +40,7 @@ all: import-api scan report remediate
 
 clean:
 	@echo "==> Limpiando reportes generados..."
-	rm -f $(REPORT_DIR)/zap-report.json $(REPORT_DIR)/remediation-report.md
+	-python3 -c "import os; [os.remove(f) for f in ['docs/security/zap-report.json', 'docs/security/remediation-report.md'] if os.path.exists(f)]"
 
 reset: clean
 	@echo "==> Limpiando todo el entorno (contenedores y volúmenes)..."
