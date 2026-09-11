@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  zap:
+    image: zaproxy/zap-stable
+    container_name: zap-dashboard
+    restart: unless-stopped
+    command: zap-webswing.sh
+    ports:
+      - "8090:8080" # Interfaz gráfica (WebSwing) -> Accedes por http://localhost:8090/zap
+      - "8081:8081" # Puerto Proxy / API de ZAP
+    environment:
+      - ZAP_PORT=8081
+    volumes:
+      # Guarda reportes e informes directo en tu proyecto local
+      - ./docs/security:/zap/wrk/
+    extra_hosts:
+      # Permite que ZAP en el contenedor pueda ver a tu microservicio en el Host local
+      - "host.docker.internal:host-gateway"
+    networks:
+      - zap-net
+
+networks:
+  zap-net:
+    driver: bridge
