@@ -3,7 +3,7 @@
 # Variables
 OPENAPI_URL ?= http://host.docker.internal:8080/v3/api-docs
 TARGET_URL ?= http://host.docker.internal:8080
-ZAP_CONTAINER = zap
+ZAP_CONTAINER = zap-dashboard
 OLLAMA_CONTAINER = ollama-llm
 MODEL_NAME ?= qwen2.5-coder:7b
 REPORT_DIR = ./docs/security
