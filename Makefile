@@ -1,4 +1,4 @@
-.PHONY: help import-api scan generate-report remediate all clean
+.PHONY: help import-api scan generate-report remediate all clean reset
 
 # Variables
 OPENAPI_URL ?= http://host.docker.internal:8080/v3/api-docs
@@ -15,6 +15,8 @@ help:
 	@echo "  make report      - Genera y exporta zap-report.json"
 	@echo "  make remediate   - Procesa zap-report.json con Ollama y crea el reporte Markdown"
 	@echo "  make all         - Ejecuta todo el flujo completo de DevSecOps"
+	@echo "  make clean       - Elimina los reportes generados localmente"
+	@echo "  make reset       - Elimina los reportes y baja los contenedores borrando sus volúmenes"
 
 import-api:
 	@echo "==> [Paso 1] Importando definición OpenAPI en ZAP..."
@@ -37,4 +39,9 @@ all: import-api scan report remediate
 	@echo "==> Pipeline DevSecOps completado exitosamente."
 
 clean:
+	@echo "==> Limpiando reportes generados..."
 	rm -f $(REPORT_DIR)/zap-report.json $(REPORT_DIR)/remediation-report.md
+
+reset: clean
+	@echo "==> Limpiando todo el entorno (contenedores y volúmenes)..."
+	docker-compose down -v

@@ -67,6 +67,17 @@ Puedes ejecutar el flujo paso a paso o todo en un solo comando:
    make remediate
    ```
 
+5. **Limpiar entorno y empezar de nuevo:**
+   Si deseas borrar los reportes generados o eliminar todo el entorno (contenedores y volúmenes) para empezar desde cero, tienes dos opciones:
+   - Para solo borrar los reportes localmente:
+     ```bash
+     make clean
+     ```
+   - Para borrar los reportes Y destruir los contenedores y sus volúmenes asociados:
+     ```bash
+     make reset
+     ```
+
 ---
 
 ### Execución Completa (Un solo comando)
