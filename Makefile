@@ -10,6 +10,8 @@ REPORT_DIR = ./docs/security
 
 help:
 	@echo "Comandos disponibles:"
+	@echo "  make up          - Levanta los contenedores en segundo plano (docker-compose up -d)"
+	@echo "  make down        - Detiene los contenedores (docker-compose down)"
 	@echo "  make import-api  - Importa la especificación OpenAPI en OWASP ZAP"
 	@echo "  make scan        - Ejecuta el escaneo activo en OWASP ZAP"
 	@echo "  make report      - Genera y exporta zap-report.json"
@@ -17,6 +19,14 @@ help:
 	@echo "  make all         - Ejecuta todo el flujo completo de DevSecOps"
 	@echo "  make clean       - Elimina los reportes generados localmente"
 	@echo "  make reset       - Elimina los reportes y baja los contenedores borrando sus volúmenes"
+
+up:
+	@echo "==> Levantando el entorno de contenedores..."
+	docker-compose up -d
+
+down:
+	@echo "==> Deteniendo el entorno de contenedores..."
+	docker-compose down
 
 import-api:
 	@echo "==> [Paso 1] Importando definición OpenAPI en ZAP..."
