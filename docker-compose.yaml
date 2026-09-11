@@ -5,7 +5,7 @@ services:
     image: zaproxy/zap-stable
     container_name: zap-dashboard
     restart: unless-stopped
-    command: zap-webswing.sh -host 0.0.0.0 -port 8081 -config api.disablekey=true -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
+    command: zap.sh -daemon -host 0.0.0.0 -port 8081 -config api.disablekey=true -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
     ports:
       - "8090:8080" # UI WebSwing
       - "8081:8081" # Proxy / API ZAP

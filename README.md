@@ -17,9 +17,7 @@ docker-compose up -d
 
 ## Acceso
 
-- **Interfaz Gráfica (WebSwing)**: Una vez que el contenedor esté en ejecución, puedes acceder a la interfaz de usuario directamente desde tu navegador en:  
-  👉 [http://localhost:8090/zap](http://localhost:8090/zap)
-- **Puerto Proxy / API**: El proxy y la API de ZAP están expuestos en el puerto `8081` (localhost:8081).
+- **Modo Daemon / API**: Para poder automatizar las pruebas con el `Makefile`, ZAP se ejecuta en modo _Daemon_ (sin interfaz gráfica) exponiendo su API REST y Proxy en el puerto `8081` (localhost:8081). Esto es el estándar para pipelines DevSecOps.
 
 ## Volúmenes y Reportes
 
