@@ -5,21 +5,45 @@ services:
     image: zaproxy/zap-stable
     container_name: zap-dashboard
     restart: unless-stopped
-    command: zap-webswing.sh
+    command: zap-webswing.sh -config api.disablekey=true
     ports:
-      - "8090:8080" # Interfaz gráfica (WebSwing) -> Accedes por http://localhost:8090/zap
-      - "8081:8081" # Puerto Proxy / API de ZAP
+      - "8090:8080" # UI WebSwing
+      - "8081:8081" # Proxy / API ZAP
     environment:
       - ZAP_PORT=8081
     volumes:
-      # Guarda reportes e informes directo en tu proyecto local
       - ./docs/security:/zap/wrk/
     extra_hosts:
-      # Permite que ZAP en el contenedor pueda ver a tu microservicio en el Host local
       - "host.docker.internal:host-gateway"
     networks:
-      - zap-net
+      - devsecops-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama-llm
+    restart: unless-stopped
+    ports:
+      - "11434:11434" # API local de Ollama
+    volumes:
+      - ollama_data:/root/.ollama # Persistencia de los modelos descargados
+    networks:
+      - devsecops-net
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 networks:
-  zap-net:
+  devsecops-net:
     driver: bridge
+
+volumes:
+  ollama_data:

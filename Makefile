@@ -30,16 +30,16 @@ down:
 
 import-api:
 	@echo "==> [Paso 1] Importando definición OpenAPI en ZAP..."
-	docker exec $(ZAP_CONTAINER) zap-cli openapi import $(OPENAPI_URL) Target=$(TARGET_URL)
+	curl -s "http://localhost:8081/JSON/openapi/action/importUrl/?url=$(OPENAPI_URL)&target=$(TARGET_URL)"
 
 scan:
 	@echo "==> [Paso 2] Ejecutando Active Scan sobre $(TARGET_URL)..."
-	docker exec $(ZAP_CONTAINER) zap-cli active-scan $(TARGET_URL)
+	curl -s "http://localhost:8081/JSON/ascan/action/scan/?url=$(TARGET_URL)"
 
 report:
 	@echo "==> [Paso 3] Exportando hallazgos a JSON..."
-	mkdir -p $(REPORT_DIR)
-	docker exec $(ZAP_CONTAINER) zap-cli report -o /zap/wrk/zap-report.json -f json
+	-mkdir -p $(REPORT_DIR) 2>nul || cd .
+	curl -s "http://localhost:8081/OTHER/core/other/jsonreport/" > $(REPORT_DIR)/zap-report.json
 
 remediate:
 	@echo "==> [Paso 4] Analizando vulnerabilidades con Ollama ($(MODEL_NAME))..."
