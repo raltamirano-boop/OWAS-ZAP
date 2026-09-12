@@ -24,16 +24,7 @@ up:
 	@echo "==> Levantando el entorno de contenedores..."
 	docker-compose up -d
 	@echo "==> Esperando a que ZAP inicie completamente (puede tomar ~40 segundos)..."
-	@python3 -c "import time, urllib.request; \
-	print('Esperando a ZAP en localhost:8081...', end='', flush=True); \
-	ready = False; \
-	for _ in range(30): \
-		try: \
-			urllib.request.urlopen('http://localhost:8081'); \
-			ready = True; break \
-		except Exception: \
-			print('.', end='', flush=True); time.sleep(2) \
-	print('\n' + ('¡ZAP Listo!' if ready else 'Error: ZAP tardó demasiado.'))"
+	@python3 wait_for_zap.py
 
 down:
 	@echo "==> Deteniendo el entorno de contenedores..."
