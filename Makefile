@@ -12,6 +12,7 @@ help:
 	@echo "Comandos disponibles:"
 	@echo "  make up          - Levanta los contenedores en segundo plano (docker-compose up -d)"
 	@echo "  make down        - Detiene los contenedores (docker-compose down)"
+	@echo "  make pull-model  - Descarga el modelo de IA localmente en el contenedor de Ollama"
 	@echo "  make import-api  - Importa la especificación OpenAPI en OWASP ZAP"
 	@echo "  make scan        - Ejecuta el escaneo activo en OWASP ZAP"
 	@echo "  make report      - Genera y exporta zap-report.json"
@@ -29,6 +30,10 @@ up:
 down:
 	@echo "==> Deteniendo el entorno de contenedores..."
 	docker-compose down
+
+pull-model:
+	@echo "==> Descargando el modelo $(MODEL_NAME) en Ollama (esto puede tardar varios minutos dependiendo de tu internet)..."
+	docker exec $(OLLAMA_CONTAINER) ollama pull $(MODEL_NAME)
 
 import-api:
 	@echo "==> [Paso 1] Importando definición OpenAPI en ZAP..."
