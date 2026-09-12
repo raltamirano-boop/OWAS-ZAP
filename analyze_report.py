@@ -1,5 +1,6 @@
 import json
-import requests
+import urllib.request
+import urllib.error
 import os
 
 REPORT_PATH = './docs/security/zap-report.json'
@@ -61,14 +62,20 @@ def get_llm_fix(alert):
         }
     }
     
+    data = json.dumps(payload).encode('utf-8')
+    req = urllib.request.Request(OLLAMA_URL, data=data, headers={'Content-Type': 'application/json'})
+    
     try:
-        response = requests.post(OLLAMA_URL, json=payload, timeout=300)
-        if response.status_code == 200:
-            return response.json().get('response', 'Sin respuesta del modelo.')
-        else:
-            return f"Error en Ollama (HTTP {response.status_code})"
-    except Exception as e:
+        with urllib.request.urlopen(req, timeout=300) as response:
+            if response.status == 200:
+                result = json.loads(response.read().decode('utf-8'))
+                return result.get('response', 'Sin respuesta del modelo.')
+            else:
+                return f"Error en Ollama (HTTP {response.status})"
+    except urllib.error.URLError as e:
         return f"Error de conexión con Ollama: {str(e)}"
+    except Exception as e:
+        return f"Error inesperado al conectar con Ollama: {str(e)}"
 
 def main():
     print("=== Iniciando Procesamiento Automático de Seguridad ===")
